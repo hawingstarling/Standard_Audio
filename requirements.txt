@@ -1,0 +1,8 @@
+PyQt6
+PyQt5
+PySide2
+spotipy
+mysql-connector
+dotenv
+python-dotenv
+mutagen

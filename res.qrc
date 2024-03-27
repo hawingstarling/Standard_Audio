@@ -1,0 +1,31 @@
+<RCC>
+  <qresource prefix="assets">
+    <file>assets/images/Loop.svg</file>
+    <file>assets/images/magazine.png</file>
+    <file>assets/images/Move.svg</file>
+    <file>assets/images/Shuffle.svg</file>
+    <file>assets/images/money_machine.png</file>
+    <file>assets/images/React.svg</file>
+    <file>assets/images/crystal_castled_i.png</file>
+    <file>assets/images/in_rainbows.png</file>
+    <file>assets/images/ok_computer.png</file>
+    <file>assets/images/the division_bell.png</file>
+    <file>assets/images/Like.svg</file>
+    <file>assets/images/Logout.png</file>
+    <file>assets/images/Music.svg</file>
+    <file>assets/images/Settings.png</file>
+    <file>assets/images/border_avatar.svg</file>
+    <file>assets/images/border.svg</file>
+    <file>assets/images/Vector.png</file>
+    <file>assets/images/ObitoUchiha.png</file>
+    <file>assets/images/ChevronLeft.png</file>
+    <file>assets/images/ChevronRight.png</file>
+    <file>assets/images/Duplicated.png</file>
+    <file>assets/images/Load.png</file>
+    <file>assets/images/Plus.png</file>
+    <file>assets/images/Search.png</file>
+    <file>assets/images/Shield.png</file>
+    <file>assets/images/Tab.png</file>
+    <file>assets/images/Upload.png</file>
+  </qresource>
+</RCC>

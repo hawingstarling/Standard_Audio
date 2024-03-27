@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1219</width>
+    <height>848</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1219</width>
+     <height>848</height>
+    </rect>
+   </property>
+   <widget class="QFrame" name="navbar_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1219</width>
+      <height>52</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #F4F4F4; 
+border-radius: 0px; 
+border-top-right-radius: 6px</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="playlist_6">
+     <property name="geometry">
+      <rect>
+       <x>568</x>
+       <y>17</y>
+       <width>55</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>SF Pro Display</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #4A4A4A
+</string>
+     </property>
+     <property name="text">
+      <string>Playlist</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="imageAlbum_2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>100</y>
+      <width>270</width>
+      <height>270</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../images/Hiphop.png</pixmap>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="nameAlbum_2">
+    <property name="geometry">
+     <rect>
+      <x>352</x>
+      <y>100</y>
+      <width>481</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>SF Pro Display</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>My Playlist Replay</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="applemusic_2">
+    <property name="geometry">
+     <rect>
+      <x>352</x>
+      <y>137</y>
+      <width>481</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>SF Pro Display</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #F7C74E</string>
+    </property>
+    <property name="text">
+     <string>Apple Music My Playlist</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="playButton_2">
+    <property name="geometry">
+     <rect>
+      <x>352</x>
+      <y>322</y>
+      <width>153</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>SF Pro Display</family>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: none;
+border-radius: 3px;
+background-color: #F8C84E;
+color: #fff</string>
+    </property>
+    <property name="text">
+     <string>Play</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../images/play_white.png</normaloff>../images/play_white.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="shuffleButton_2">
+    <property name="geometry">
+     <rect>
+      <x>515</x>
+      <y>322</y>
+      <width>153</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>SF Pro Display</family>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: none;
+border-radius: 3px;
+background-color: #F8C84E;
+color: #fff</string>
+    </property>
+    <property name="text">
+     <string>Add</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../images/shuffle_white.png</normaloff>../images/shuffle_white.png</iconset>
+    </property>
+   </widget>
+   <widget class="QFrame" name="titlebar_3">
+    <property name="geometry">
+     <rect>
+      <x>98</x>
+      <y>409</y>
+      <width>1117</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="label_17">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>SF Pro Display</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #808080</string>
+     </property>
+     <property name="text">
+      <string>SONG</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_18">
+     <property name="geometry">
+      <rect>
+       <x>455</x>
+       <y>0</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>SF Pro Display</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #808080</string>
+     </property>
+     <property name="text">
+      <string>ARTIST</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_19">
+     <property name="geometry">
+      <rect>
+       <x>755</x>
+       <y>0</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>SF Pro Display</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #808080</string>
+     </property>
+     <property name="text">
+      <string>ALBUM</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_20">
+     <property name="geometry">
+      <rect>
+       <x>1031</x>
+       <y>0</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>SF Pro Display</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #808080</string>
+     </property>
+     <property name="text">
+      <string>DUR</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QListWidget" name="listWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>24</x>
+      <y>433</y>
+      <width>1160</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QListWidget {
+	border: none;
+}
+
+QListWidget:select {
+	background-color: rgb(0, 20, 163)
+}</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
