@@ -1,5 +1,6 @@
 from functools import partial
 import sys
+import random
 import platform
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtCore import (QCoreApplication, QPropertyAnimation, QDate, QDateTime, QMetaObject, QObject, QPoint, QRect, QSize, QTime, QUrl, Qt, QEvent, Slot)
@@ -18,20 +19,21 @@ from ui.Item import ItemObject
 # CONNECT DB
 from database.db import connect
 from ui.Playlist import Playlist, PlaylistObject
-
+import requests
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
+
         self.cursor = None
-
         self.conn_mysql = None
-        self.cursor, self.conn_mysql = self.ConnectMySql()
 
+        self.cursor, self.conn_mysql = self.ConnectMySql()
 
         # Init
         self.current_songs = []
+        self.loop_Enable = False
         self.current_volume = 50
         #  Position player 
         self.current_position = 0
@@ -84,26 +86,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # PAGE 1
         self.pushButton_ListenNow.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_3))  
         # PAGE 2
-        # self.frameMusic.mousePressEvent = partial(lambda event, ui: ui.stackedWidget.setCurrentWidget(ui.page_4), ui=self)
         self.pushButton_Favourite.clicked.connect(lambda: (self.stackedWidget.setCurrentWidget(self.page_4), self.GetAllSongs()))
-
+ 
         # Style Active Button Menu
         for w in self.AppleMusic_3.findChildren(QPushButton):
             w.clicked.connect(self.applyStyleButton)
         
         # # Connections
-        # self.songSlider.sliderMoved[int].connect(lambda: self.player.setPosition(self.songSlider.value()))
-        # self.volumeSlider.sliderMoved[int].connect(lambda: self.volume_Changed())
-        # self.buttonAddSong.clicked.connect(self.add_Song)
-        # self.resumeButtonSong.clicked.connect(lambda: self.togglePauseResume(self.listWidget))
-        # self.nextButtonSong.clicked.connect(lambda: self.next_Song(self.listWidget))
-        # self.prevButtonSong.clicked.connect(lambda: self.prev_Song(self.listWidget))
+        self.songSlider.sliderMoved[int].connect(lambda: self.player.setPosition(self.songSlider.value()))
+        self.volumeSlider.sliderMoved[int].connect(lambda: self.volume_Changed())
+        self.buttonAddSong.clicked.connect(self.add_Song)
+        self.resumeButtonSong.clicked.connect(lambda: self.togglePauseResume(self.listWidget))
+        self.nextButtonSong.clicked.connect(lambda: self.next_Song(self.listWidget))
+        self.prevButtonSong.clicked.connect(lambda: self.prev_Song(self.listWidget))
 
         # Media Player Signals
         self.player.stateChanged.connect(self.mediaState_Changed)
 
+        # Media Change
+        self.player.mediaStatusChanged.connect(lambda status: self.AutoNextMusic(status, self.listWidget))
+
         # Add Playlist
-        self.buttonAddPlaylist.clicked.connect(self.create_new_page)
+        self.buttonAddPlaylist.clicked.connect(self.CreateNewPage)
 
         # TrafficLight Window
         self.TrafficLight_ED695E_6.clicked.connect(self.close_Window)
@@ -113,23 +117,209 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.listWidget.installEventFilter(self)
 
         # Get All Playlists
-        self.GetAllPlaylists()
+        self.GetPages()
+        self.SpotifyChart()
+
 
         ## SHOW ==> MAIN WINDOW
         ########################################################################
         self.show()
         ## ==> END ##
 
+    def SetPixmapFromUrl(self, url, label):
+        res = requests.get(url)
+        image = QPixmap()
+        image.loadFromData(res.content)
+        label.setPixmap(image)
+        label.setScaledContents(True)  # Cài đặt thuộc tính này để phù hợp với nội dung của QLabel
+        label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # Set size policy to expanding
+
+    def SpotifyChart(self):
+        # URL của API bạn muốn gọi
+        url = 'https://charts-spotify-com-service.spotify.com/public/v0/charts'
+
+        # Gọi API sử dụng phương thức GET
+        response = requests.get(url)
+
+        # Kiểm tra xem request có thành công không
+        if response.status_code == 200:
+            # Xử lý dữ liệu trả về ở đây
+            data = response.json()
+            
+            # Top track
+            most_track_0 = data['chartEntryViewResponses'][0]['entries'][0]
+            rank_0 = most_track_0['chartEntryData']
+            track_0 = most_track_0['trackMetadata']
+            self.label_49.setText(str(rank_0['currentRank']))
+            self.label_48.setText(track_0['trackName'])
+            self.label_44.setText(track_0['artists'][0]['name'])
+            self.label_47.setText(str(rank_0['previousRank']))
+            self.SetPixmapFromUrl(track_0['displayImageUri'], self.label_45)
+
+            most_track_1 = data['chartEntryViewResponses'][0]['entries'][1]
+            rank_1 = most_track_1['chartEntryData']
+            track_1 = most_track_1['trackMetadata']
+            self.label_55.setText(str(rank_1['currentRank']))
+            self.label_54.setText(track_1['trackName'])
+            self.label_50.setText(track_1['artists'][0]['name'])
+            self.label_53.setText(str(rank_1['previousRank']))
+            self.SetPixmapFromUrl(track_1['displayImageUri'], self.label_51)
+
+            most_track_2 = data['chartEntryViewResponses'][0]['entries'][2]
+            rank_2 = most_track_2['chartEntryData']
+            track_2 = most_track_2['trackMetadata']
+            self.label_61.setText(str(rank_2['currentRank']))
+            self.label_60.setText(track_2['trackName'])
+            self.label_56.setText(track_2['artists'][0]['name'])
+            self.label_59.setText(str(rank_2['previousRank']))
+            self.SetPixmapFromUrl(track_2['displayImageUri'], self.label_57)
+
+            most_track_3 = data['chartEntryViewResponses'][0]['entries'][3]
+            rank_3 = most_track_3['chartEntryData']
+            track_3 = most_track_3['trackMetadata']
+            self.label_67.setText(str(rank_3['currentRank']))
+            self.label_66.setText(track_3['trackName'])
+            self.label_62.setText(track_3['artists'][0]['name'])
+            self.label_65.setText(str(rank_3['previousRank']))
+            self.SetPixmapFromUrl(track_3['displayImageUri'], self.label_63)
+
+            most_track_4 = data['chartEntryViewResponses'][0]['entries'][4]
+            rank_4 = most_track_4['chartEntryData']
+            track_4 = most_track_4['trackMetadata']
+            self.label_73.setText(str(rank_4['currentRank']))
+            self.label_72.setText(track_4['trackName'])
+            self.label_68.setText(track_4['artists'][0]['name'])
+            self.label_71.setText(str(rank_4['previousRank']))
+            self.SetPixmapFromUrl(track_4['displayImageUri'], self.label_69)
+
+            most_track_5 = data['chartEntryViewResponses'][0]['entries'][5]
+            rank_5 = most_track_5['chartEntryData']
+            track_5 = most_track_5['trackMetadata']
+            self.label_79.setText(str(rank_5['currentRank']))
+            self.label_78.setText(track_5['trackName'])
+            self.label_74.setText(track_5['artists'][0]['name'])
+            self.label_77.setText(str(rank_5['previousRank']))
+            self.SetPixmapFromUrl(track_5['displayImageUri'], self.label_75)
+
+            # Top artist
+            most_artist = data['chartEntryViewResponses'][2]['entries'][0]
+            artist = most_artist['artistMetadata']
+            self.SetPixmapFromUrl(artist['displayImageUri'], self.label_2)
+            self.label_16.setText(artist['artistName'])
+
+            most_artist_1 = data['chartEntryViewResponses'][2]['entries'][1]
+            artist_1 = most_artist_1['artistMetadata']
+            self.SetPixmapFromUrl(artist_1['displayImageUri'], self.label_3)
+            self.label_17.setText(artist_1['artistName'])
+
+            most_artist_2 = data['chartEntryViewResponses'][2]['entries'][2]
+            artist_2 = most_artist_2['artistMetadata']
+            self.SetPixmapFromUrl(artist_2['displayImageUri'], self.label_4)
+            self.label_18.setText(artist_2['artistName'])
+
+            most_artist_3 = data['chartEntryViewResponses'][2]['entries'][3]
+            artist_3 = most_artist_3['artistMetadata']
+            self.SetPixmapFromUrl(artist_3['displayImageUri'], self.label_13)
+            self.label_19.setText(artist_3['artistName'])
+
+            most_artist_4 = data['chartEntryViewResponses'][2]['entries'][4]
+            artist_4 = most_artist_4['artistMetadata']
+            self.SetPixmapFromUrl(artist_4['displayImageUri'], self.label_14)
+            self.label_20.setText(artist_4['artistName'])
+
+            most_artist_5 = data['chartEntryViewResponses'][2]['entries'][5]
+            artist_5 = most_artist_5['artistMetadata']
+            self.SetPixmapFromUrl(artist_5['displayImageUri'], self.label_15)
+            self.label_21.setText(artist_5['artistName'])
+
+        else:
+
+            print("Đã có lỗi xảy ra:", response.status_code)
+
     def eventFilter(self, source, event):
+        fontMenu = QFont()
+        fontMenu.setFamily(u"SF Pro Display")
+        fontMenu.setPointSize(15)
+        fontMenu.setWeight(50)
         if event.type() == QEvent.ContextMenu and source is self.listWidget:
             menu = QMenu()
-            menu.addAction('Delete')
-            menu.addAction('Playlist')
+            menu.setFont(fontMenu)
+            menu.setWindowFlag(Qt.FramelessWindowHint)
+            menu.setAttribute(Qt.WA_TranslucentBackground)
+            menu.setWindowOpacity(0.6)
+            menu.setStyleSheet("""
+                QMenu {
+                    width: 200px;
+                    border-color: rgba(199, 199, 199, 1);
+                    border-style: solid;
+                    border-width: 0px;
+                    background-color: #F7F7F7;
+                    color: #202124;
+                    border-radius: 8px;
+                    font-family: "SF Pro Display";
+                }
+                QMenu::item {
+                    width: 190px;
+                    background-color: transparent;
+                    font-size: 18px;
+                    padding-left: 10px;
+                }
+                QMenu::icon {
+                    padding-right: 15px;
+                }
+                QMenu::item:selected {
+                    background-color: #3e92f8;
+                    color: #fff;
+                }
+                QMenu::item:selected:disabled {
+                    background-color: transparent;
+                    color: #202124;
+                }
+
+                QMenu::right-arrow {
+                    image: url("./images/chevronright.svg")
+                }
+   
+            """)
+            menu_1 = menu.addAction("Delete")
+            menu_1.setIcon(QIcon("./images/remove.svg"))
+            menu_1.triggered.connect(lambda: self.DeleteSong(source.currentItem().data(Qt.UserRole)))
+
+            menu_2 = menu.addMenu("Add to Playlist")
+            menu_2.setIcon(QIcon("./images/playlist.svg"))
+
+            playlists = self.GetAllPlaylists()
+            for playlist in playlists:
+                playlist_id = playlist[0]
+                playlist_name = playlist[1]
+                print('playlist ', playlist_id)
+                action = QAction(QIcon("./images/playlist.svg"), playlist_name, self)
+                action.setFont(fontMenu)
+                action.setData(playlist_id)
+                action.triggered.connect(lambda playlist_id=playlist_id, song_data=source.currentItem().data(Qt.UserRole): self.AddSongToPlaylist(playlist_id, song_data))
+                menu_2.addAction(action)
 
             if menu.exec_(event.globalPos()):
                 item = source.itemAt(event.pos())
             return True
         return super().eventFilter(source, event)
+
+    def AddSongToPlaylist(self, idPlaylist, idSong):
+        add_playlist_song = ("INSERT INTO playlist_song "
+                    "(idPlaylist, idSong) "
+                    "VALUES (%(idPlaylist)s, %(idSong)s)")
+        data_playlist_song = {
+            'idPlaylist': idPlaylist,
+            'idSong': idSong,
+        }
+
+        # Insert new song
+        self.cursor.execute(add_playlist_song, data_playlist_song)
+
+        # Make sure data is committed to the database
+        self.conn_mysql.commit()
+
+        print("Play_song Added!!")
 
     def ConnectMySql(self):
         cursor, conn_mysql = connect()
@@ -161,34 +351,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return self.cursor.lastrowid
         
     def GetAllSongs(self):
+        self.current_songs = []
         # Double Clicked QListWidget
         self.connect(self.listWidget, QtCore.SIGNAL("itemDoubleClicked(QListWidgetItem *)"), lambda: self.play_Song(self.listWidget))
 
-        # CONNECTION BUTTONS MUSIC
-        self.songSlider.sliderMoved[int].connect(lambda: self.player.setPosition(self.songSlider.value()))
-        self.volumeSlider.sliderMoved[int].connect(lambda: self.volume_Changed())
-        self.buttonAddSong.clicked.connect(self.add_Song)
+        self.resumeButtonSong.clicked.disconnect(self.togglePauseResume(self.listWidget))
+        self.nextButtonSong.clicked.disconnect(self.next_Song(self.listWidget))
+        self.prevButtonSong.clicked.disconnect(self.prev_Song(self.listWidget))
+
         self.resumeButtonSong.clicked.connect(lambda: self.togglePauseResume(self.listWidget))
         self.nextButtonSong.clicked.connect(lambda: self.next_Song(self.listWidget))
         self.prevButtonSong.clicked.connect(lambda: self.prev_Song(self.listWidget))
 
+        # CONNECTION BUTTONS MUSIC
+        # self.songSlider.sliderMoved[int].connect(lambda: self.player.setPosition(self.songSlider.value()))
+        # self.volumeSlider.sliderMoved[int].connect(lambda: self.volume_Changed())
+        # self.buttonAddSong.clicked.connect(self.add_Song)
+        # self.resumeButtonSong.clicked.connect(lambda: self.togglePauseResume(self.listWidget))
+        # self.nextButtonSong.clicked.connect(lambda: self.next_Song(self.listWidget))
+        # self.prevButtonSong.clicked.connect(lambda: self.prev_Song(self.listWidget))
 
-        self.current_songs = []
-        query = ("SELECT song.name, song.link, song.image, song.dur, album.name, singer.name FROM song, album, singer "
-                "WHERE song.idSinger = singer.id AND song.idAlbum = album.id")
+        query = ("SELECT song.id, song.name, song.link, song.image, song.dur, album.name, singer.name FROM song, album, singer WHERE song.idSinger = singer.id AND song.idAlbum = album.id")
         self.cursor.execute(query)
         songs = self.cursor.fetchall()
         for song in songs:
-            song_name = song[0]
-            song_link = song[1]
-            song_image = song[2]
-            song_dur = song[3]
-            album_name = song[4]
-            singer_name = song[5]
+            song_id = song[0]
+            song_name = song[1]
+            song_link = song[2]
+            song_image = song[3]
+            song_dur = song[4]
+            album_name = song[5]
+            singer_name = song[6]
 
             self.current_songs.append(song_link)
             # Item data
             item_data = {
+                'id': song_id,
                 'music': song_name,
                 'artist': singer_name,
                 'album': album_name,
@@ -197,13 +395,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             }
             self.add_ItemSong(item_data)
 
-
     def DeleteSong(self, song_no):
-        query = "DELETE FROM song WHERE id = %s"
-
-        self.cursor.execute(query, (song_no,))
+        delete_playlist_song_query = "DELETE FROM playlist_song WHERE idSong = %s"
+        self.cursor.execute(delete_playlist_song_query, (song_no,))
         self.conn_mysql.commit()
-        print(self.cursor.rowcount, "Delete record.")
+        print(self.cursor.rowcount, "Delete record playlist_song.")
+
+        delete_song_query = "DELETE FROM song WHERE id = %s"
+        self.cursor.execute(delete_song_query, (song_no,))
+        self.conn_mysql.commit()
+        print(self.cursor.rowcount, "Records deleted from song with id:", song_no)
+
+        self.UpdateListWidget()
+
+    def UpdateListWidget(self):
+        self.listWidget.clear()
+        self.GetAllSongs()
+            
 
     def CreateNewSongs(self, name, link, image, dur, singer_name, album_name):
         singer_no = self.check_singer(singer_name)
@@ -227,6 +435,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Make sure data is committed to the database
         self.conn_mysql.commit()
 
+        return self.cursor.lastrowid
+
     def CreateNewPlaylist(self):
         add_playlist = ("INSERT INTO playlist "
                     "(PlaylistName) "
@@ -238,73 +448,71 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Make sure data is committed to the database
         self.conn_mysql.commit()
 
+        while self.vBox_Playlist.count() > 0:
+            item = self.vBox_Playlist.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        
+        self.vBox_Playlist.setContentsMargins(0, 0, 0, 0)
+        self.vBox_Playlist.addStretch()
+        self.GetPages()
+
     def GetAllPlaylists(self):
         query = """SELECT * FROM playlist"""
         self.cursor.execute(query)
         playlists = self.cursor.fetchall()
 
+        return playlists
+
+
+    def GetPages(self):
+        playlists = self.GetAllPlaylists()
 
         for playlist in playlists:
             playlist_id = playlist[0]
             playlist_name = playlist[1]
 
-            newButtonPage = self.GetPages(playlist_name, playlist_id)
+            font = QFont()
+            font.setFamily(u"SF Pro Display")
+            font.setPointSize(10)
 
-            # # self.current_songs.append(song_link)
-            # # Item data
-            # item_data = {
-            #     'playlist_name': playlist_name,
-            #     'music': song_name,
-            #     'artist': singer_name,
-            #     'album': album_name,
-            #     'duration': song_dur,
-            #     'image': song_image
-            # }
-            # self.add_Playlist(playlist_id, newButtonPage) // FIX
+            newPlaylistButton = QPushButton()
+            newPlaylistButton.setObjectName(playlist_name)
+            newPlaylistButton.setSizeIncrement(QSize(0, 0))
+            newPlaylistButton.setBaseSize(QSize(0, 0))
+            newPlaylistButton.setFixedSize(200, 28)
+            newPlaylistButton.setFont(font)
+            newPlaylistButton.setText(playlist_name)
+            newPlaylistButton.setCursor(QCursor(Qt.PointingHandCursor))
+            newPlaylistButton.setLayoutDirection(Qt.LeftToRight)
+            newPlaylistButton.setStyleSheet(u"border-radius: 6px;\n"
+            "text-align: left;\n"
+            "padding-left: 16px;\n"
+            "")
+            newIcon = QIcon()
+            newIcon.addFile(u"./images/playlist.svg", QSize(), QIcon.Normal, QIcon.Off)
+            newPlaylistButton.setIcon(newIcon)
+            newPlaylistButton.setIconSize(QSize(16, 16))
+            newPlaylistButton.setCheckable(False)
+            newPlaylistButton.setAutoDefault(False)
+            newPlaylistButton.setFlat(False)
 
+            self.vBox_Playlist.insertWidget(0, newPlaylistButton)
 
-    def GetPages(self, playlist_name, playlist_id):
-        font = QFont()
-        font.setFamily(u"SF Pro Display")
-        font.setPointSize(10)
-
-        newPlaylistButton = QPushButton()
-        newPlaylistButton.setObjectName(playlist_name)
-        newPlaylistButton.setSizeIncrement(QSize(0, 0))
-        newPlaylistButton.setBaseSize(QSize(0, 0))
-        newPlaylistButton.setFixedSize(200, 28)
-        newPlaylistButton.setFont(font)
-        newPlaylistButton.setText(playlist_name)
-        newPlaylistButton.setCursor(QCursor(Qt.PointingHandCursor))
-        newPlaylistButton.setLayoutDirection(Qt.LeftToRight)
-        newPlaylistButton.setStyleSheet(u"border-radius: 6px;\n"
-"text-align: left;\n"
-"padding-left: 16px;\n"
-"")
-        newIcon = QIcon()
-        newIcon.addFile(u"./images/playlist.svg", QSize(), QIcon.Normal, QIcon.Off)
-        newPlaylistButton.setIcon(newIcon)
-        newPlaylistButton.setIconSize(QSize(16, 16))
-        newPlaylistButton.setCheckable(False)
-        newPlaylistButton.setAutoDefault(False)
-        newPlaylistButton.setFlat(False)
-
-        self.vBox_Playlist.insertWidget(0, newPlaylistButton)
-
-        newPlaylistButton.clicked.connect(self.applyStyleButton)
-        # Connect event clicked for newPlaylistButton after init.
-        newPlaylistButton.clicked.connect(lambda: (self.add_Playlist(playlist_id, newPlaylistButton)))
-
-        return newPlaylistButton
-
-    # FIX
+            newPlaylistButton.clicked.connect(self.applyStyleButton)
+            # Connect event clicked for newPlaylistButton after init.
+            # newPlaylistButton.clicked.connect(lambda: (self.add_Playlist(playlist_id, newPlaylistButton)))
+            newPlaylistButton.clicked.connect(lambda playlist_id=playlist_id, newPlaylistButton=newPlaylistButton: self.add_Playlist(playlist_id, newPlaylistButton))
+            
+    # # FIX
     def add_Playlist(self, playlist_id, newButtonPage): 
-    
         self.current_songs = []
+
         query = """
             SELECT
                 playlist.PlaylistID, 
                 playlist.PlaylistName, 
+                song.id,
                 song.name, 
                 song.link, 
                 song.image, 
@@ -326,24 +534,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         playlists = self.cursor.fetchall()
 
         playlist_objects = []
-        my_playlist = Playlist()
+        # my_playlist = Playlist()
 
         for playlist in playlists:
             item_data = {
+                'playlist_id': playlist[0],
                 'playlist_name': playlist[1],
-                'music': playlist[2],
-                'artist': playlist[7],
-                'album': playlist[6],
-                'duration': playlist[5],
-                'image': playlist[4]
+                'id': playlist[2],
+                'music': playlist[3],
+                'artist': playlist[8],
+                'album': playlist[7],
+                'duration': playlist[6],
+                'image': playlist[5]
             }
-            self.current_songs.append(playlist[3])
-
+            self.current_songs.append(playlist[4])
             item_object = PlaylistObject(**item_data)
             playlist_objects.append(item_object)
 
             playlist_widget = QWidget()
-            # my_playlist = Playlist()
+            my_playlist = Playlist()
             my_playlist.setupUi(playlist_widget, playlist_objects)
 
             self.resumeButtonSong.clicked.connect(lambda: self.togglePauseResume(my_playlist.listWidget_2))
@@ -409,6 +618,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Tạo một QListWidgetItem mới cho mỗi Item và gắn Item vào nó
         item_widget = QListWidgetItem()
+        item_widget.setData(Qt.UserRole, item_data['id'])
         item_widget.setSizeHint(newItem.sizeHint())  # Đảm bảo kích thước của QListWidgetItem phù hợp với kích thước đã thiết lập
         self.listWidget.insertItem(self.listWidget.count(), item_widget)
         self.listWidget.setItemWidget(item_widget, my_item.item_frame)
@@ -421,7 +631,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for file in fileName:
                 self.current_songs.append(file)
                 file_path = os.path.relpath(file, os.getcwd())
-                audio = MP3(file)
+                audio = MP3(file, ID3=ID3)
                 duration_sec = audio.info.length
                 # Chuyển đổi sang định dạng phút:giây
                 minutes = int(duration_sec // 60)
@@ -455,8 +665,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Format lại chuỗi
                 duration_str = "{}:{:02d}".format(minutes, seconds)
 
+                song_id = self.CreateNewSongs(name_music, file_path, image_path, duration_str, artist_music, album_music)
+
                 # Item data
                 item_data = {
+                    'id': song_id,
                     'music': name_music,
                     'artist': artist_music,
                     'album': album_music,
@@ -464,8 +677,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     'image': image_data
                 }
                 self.add_ItemSong(item_data)
-
-                self.CreateNewSongs(name_music, file_path, image_path, duration_str, artist_music, album_music)
 
     def move_Slider(self):
         if stopped:
@@ -477,6 +688,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 slider_position = self.player.position()
                 self.songSlider.setValue(slider_position)
     
+    def shuffle_Song(self):
+        random.shuffle(self.current_songs)
+
+    def toggle_Loop(self):
+        self.loop_Enable = not self.loop_Enable
+
     def play_Song(self, listWidget):
         try:
             global stopped
@@ -527,9 +744,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.player.play()
     
+    def AutoNextMusic(self, status, listWidget):
+        if status == QMediaPlayer.EndOfMedia:
+            self.next_Song(listWidget)
     
     def next_Song(self, listWidget):
         try:
+            print('Click Next_Song')
             current_selection = listWidget.currentRow()
 
             if current_selection + 1 == len(self.current_songs):
@@ -560,6 +781,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def prev_Song(self, listWidget):
         try:
+            print('Click Previous_Song')
             current_selection = listWidget.currentRow()
 
             if current_selection == 0:
@@ -587,42 +809,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(f"Previous song error: {e}")
 
-    def create_new_page(self):
-        font = QFont()
-        font.setFamily(u"SF Pro Display")
-        font.setPointSize(10)
+    def CreateNewPage(self):
+#         font = QFont()
+#         font.setFamily(u"SF Pro Display")
+#         font.setPointSize(10)
 
-        # new_page = QWidget()
-        # self.stackedWidget.addWidget(new_page)
-        # self.stackedWidget.setCurrentWidget(new_page)
+#         newPlaylistButton = QPushButton()
+#         newPlaylistButton.setObjectName(u"newPlaylistButton")
+#         newPlaylistButton.setSizeIncrement(QSize(0, 0))
+#         newPlaylistButton.setBaseSize(QSize(0, 0))
+#         newPlaylistButton.setFixedSize(200, 28)
+#         newPlaylistButton.setFont(font)
+#         newPlaylistButton.setText("My Playlist Replay")
+#         newPlaylistButton.setCursor(QCursor(Qt.PointingHandCursor))
+#         newPlaylistButton.setLayoutDirection(Qt.LeftToRight)
+#         newPlaylistButton.setStyleSheet(u"border-radius: 6px;\n"
+# "text-align: left;\n"
+# "padding-left: 16px;\n"
+# "")
+#         newIcon = QIcon()
+#         newIcon.addFile(u"./images/playlist.svg", QSize(), QIcon.Normal, QIcon.Off)
+#         newPlaylistButton.setIcon(newIcon)
+#         newPlaylistButton.setIconSize(QSize(16, 16))
+#         newPlaylistButton.setCheckable(False)
+#         newPlaylistButton.setAutoDefault(False)
+#         newPlaylistButton.setFlat(False)
 
-        newPlaylistButton = QPushButton()
-        newPlaylistButton.setObjectName(u"newPlaylistButton")
-        newPlaylistButton.setSizeIncrement(QSize(0, 0))
-        newPlaylistButton.setBaseSize(QSize(0, 0))
-        newPlaylistButton.setFixedSize(200, 28)
-        newPlaylistButton.setFont(font)
-        newPlaylistButton.setText("My Playlist Replay")
-        newPlaylistButton.setCursor(QCursor(Qt.PointingHandCursor))
-        newPlaylistButton.setLayoutDirection(Qt.LeftToRight)
-        newPlaylistButton.setStyleSheet(u"border-radius: 6px;\n"
-"text-align: left;\n"
-"padding-left: 16px;\n"
-"")
-        newIcon = QIcon()
-        newIcon.addFile(u"./images/playlist.svg", QSize(), QIcon.Normal, QIcon.Off)
-        newPlaylistButton.setIcon(newIcon)
-        newPlaylistButton.setIconSize(QSize(16, 16))
-        newPlaylistButton.setCheckable(False)
-        newPlaylistButton.setAutoDefault(False)
-        newPlaylistButton.setFlat(False)
+#         self.vBox_Playlist.insertWidget(0, newPlaylistButton)
 
-        self.vBox_Playlist.insertWidget(0, newPlaylistButton)
+#         # Connect event clicked for newPlaylistButton after init.
+#         newPlaylistButton.clicked.connect(self.applyStyleButton)
 
-        # Connect event clicked for newPlaylistButton after init.
-        newPlaylistButton.clicked.connect(self.applyStyleButton)
-
-        # Save playlist to database
+#         # Save playlist to database
         self.CreateNewPlaylist()
 
 

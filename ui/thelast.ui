@@ -591,128 +591,6 @@ QLineEdit[text=\&quot;\&quot;] {
        <number>0</number>
       </property>
       <widget class="QWidget" name="page_3">
-       <widget class="QLabel" name="imageAlbum">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>100</y>
-          <width>270</width>
-          <height>270</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="pixmap">
-         <pixmap>../images/Hiphop.png</pixmap>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QLabel" name="nameAlbum">
-        <property name="geometry">
-         <rect>
-          <x>352</x>
-          <y>100</y>
-          <width>481</width>
-          <height>29</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>SF Pro Display</family>
-          <pointsize>16</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Hip-Hop Replay</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="applemusic">
-        <property name="geometry">
-         <rect>
-          <x>352</x>
-          <y>137</y>
-          <width>481</width>
-          <height>29</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>SF Pro Display</family>
-          <pointsize>16</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: #F7C74E</string>
-        </property>
-        <property name="text">
-         <string>Apple Music Hip Hop/Rap</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="playButton">
-        <property name="geometry">
-         <rect>
-          <x>352</x>
-          <y>322</y>
-          <width>153</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>SF Pro Display</family>
-          <pointsize>9</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: none;
-border-radius: 3px;
-background-color: #F8C84E;
-color: #fff</string>
-        </property>
-        <property name="text">
-         <string>Play</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../images/play_white.png</normaloff>../images/play_white.png</iconset>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="shuffleButton">
-        <property name="geometry">
-         <rect>
-          <x>515</x>
-          <y>322</y>
-          <width>153</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>SF Pro Display</family>
-          <pointsize>9</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: none;
-border-radius: 3px;
-background-color: #F8C84E;
-color: #fff</string>
-        </property>
-        <property name="text">
-         <string>Shuffle</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../images/shuffle_white.png</normaloff>../images/shuffle_white.png</iconset>
-        </property>
-       </widget>
        <widget class="QFrame" name="titlebar">
         <property name="geometry">
          <rect>
@@ -777,7 +655,7 @@ color: #fff</string>
           <rect>
            <x>755</x>
            <y>0</y>
-           <width>111</width>
+           <width>131</width>
            <height>16</height>
           </rect>
          </property>
@@ -791,7 +669,7 @@ color: #fff</string>
           <string notr="true">color: #808080</string>
          </property>
          <property name="text">
-          <string>ALBUM</string>
+          <string>CR</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_8">
@@ -813,7 +691,7 @@ color: #fff</string>
           <string notr="true">color: #808080</string>
          </property>
          <property name="text">
-          <string>DUR</string>
+          <string>PR</string>
          </property>
         </widget>
        </widget>
@@ -1703,49 +1581,216 @@ color: #fff</string>
          </widget>
         </widget>
        </widget>
-       <widget class="QFrame" name="navbar_2">
+       <widget class="QLabel" name="label">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>1219</width>
-          <height>52</height>
+          <x>49</x>
+          <y>60</y>
+          <width>281</width>
+          <height>61</height>
          </rect>
         </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: #F4F4F4; 
-border-radius: 0px; 
-border-top-right-radius: 6px</string>
+        <property name="font">
+         <font>
+          <family>SF Pro Text</family>
+          <pointsize>14</pointsize>
+         </font>
         </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+        <property name="text">
+         <string>Weeks Top Artirst: Global</string>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>49</x>
+          <y>130</y>
+          <width>150</width>
+          <height>150</height>
+         </rect>
         </property>
-        <widget class="QLabel" name="playlist_4">
-         <property name="geometry">
-          <rect>
-           <x>568</x>
-           <y>17</y>
-           <width>55</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>SF Pro Display</family>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">color: #4A4A4A
-</string>
-         </property>
-         <property name="text">
-          <string>Playlist</string>
-         </property>
-        </widget>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_3">
+        <property name="geometry">
+         <rect>
+          <x>229</x>
+          <y>130</y>
+          <width>150</width>
+          <height>150</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>409</x>
+          <y>130</y>
+          <width>150</width>
+          <height>150</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>589</x>
+          <y>130</y>
+          <width>150</width>
+          <height>150</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>769</x>
+          <y>130</y>
+          <width>150</width>
+          <height>150</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>949</x>
+          <y>130</y>
+          <width>150</width>
+          <height>150</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_16">
+        <property name="geometry">
+         <rect>
+          <x>49</x>
+          <y>300</y>
+          <width>150</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>SF Pro Text</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Taylor Swift</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_17">
+        <property name="geometry">
+         <rect>
+          <x>229</x>
+          <y>300</y>
+          <width>150</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>SF Pro Text</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Taylor Swift</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_18">
+        <property name="geometry">
+         <rect>
+          <x>409</x>
+          <y>300</y>
+          <width>150</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>SF Pro Text</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Taylor Swift</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_19">
+        <property name="geometry">
+         <rect>
+          <x>589</x>
+          <y>300</y>
+          <width>150</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>SF Pro Text</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Taylor Swift</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_20">
+        <property name="geometry">
+         <rect>
+          <x>769</x>
+          <y>300</y>
+          <width>150</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>SF Pro Text</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Taylor Swift</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_21">
+        <property name="geometry">
+         <rect>
+          <x>949</x>
+          <y>300</y>
+          <width>150</width>
+          <height>30</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>SF Pro Text</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Taylor Swift</string>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="page_4">
