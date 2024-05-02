@@ -85,8 +85,6 @@ class Ui_MainWindow(object):
 
         self.MainWindow.hide()
 
-        
-
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.savePlaylist.setText(QCoreApplication.translate("MainWindow", u"Edit", None))

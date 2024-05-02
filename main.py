@@ -115,7 +115,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Context Menu Right Click ListWidget
         self.listWidget.installEventFilter(self)
-
+        self.lineEditSearch.textChanged.connect(self.Search_Song)
         # Get All Playlists
         self.GetPages()
         self.SpotifyChart()
@@ -349,8 +349,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.cursor.execute(insert_query, (album_name,))
             self.conn_mysql.commit()
             return self.cursor.lastrowid
-        
+
+
+    def Search_Song(self):
+        keyword = self.lineEditSearch.text()
+        self.SearchSong(keyword)
+
+    def SearchSong(self, keyword):
+        self.listWidget.clear()
+        query = ("SELECT song.id, song.name, song.link, song.image, song.dur, album.name, singer.name FROM song, album, singer WHERE song.idSinger = singer.id AND song.idAlbum = album.id AND song.name LIKE %s")
+        self.cursor.execute(query, ('%' + keyword + '%',))
+        songs = self.cursor.fetchall()
+        for song in songs:
+            song_id = song[0]
+            song_name = song[1]
+            song_link = song[2]
+            song_image = song[3]
+            song_dur = song[4]
+            album_name = song[5]
+            singer_name = song[6]
+
+            self.current_songs.append(song_link)
+            # Item data
+            item_data = {
+                'id': song_id,
+                'music': song_name,
+                'artist': singer_name,
+                'album': album_name,
+                'duration': song_dur,
+                'image': song_image
+            }
+            self.add_ItemSong(item_data)
+
     def GetAllSongs(self):
+        self.listWidget.clear()
         self.current_songs = []
         # Double Clicked QListWidget
         self.connect(self.listWidget, QtCore.SIGNAL("itemDoubleClicked(QListWidgetItem *)"), lambda: self.play_Song(self.listWidget))
